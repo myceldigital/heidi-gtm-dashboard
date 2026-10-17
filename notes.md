@@ -1,0 +1,1 @@
+- [ ] [Ireland facility map](/cursor/stores/self/docs/ireland-gp-dashboard.html) — adding published contacts and a Heidi customer tick with count and percentage
