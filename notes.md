@@ -1,3 +1,3 @@
-- [x] [Ireland facility map](/cursor/stores/self/docs/ireland-gp-dashboard.html) — leaders, market financials with sliders, and Timeline are live; Heidi ticks still start at zero
+- [x] [Ireland facility map](/cursor/stores/self/docs/ireland-gp-dashboard.html) — minimal layout with top-bar tabs, dropdowns, and on-demand inspector
 - [x] [Heidi Ireland timeline research](bc-1d5a2178-a9b8-56ec-9827-3ca4d977843d) — 14 confirmed entries, earliest 9 Mar 2025
 - [x] [Ireland GTM events](/cursor/stores/self/docs/ireland-gtm-events.md) — 32 sourced events, 14 marked go

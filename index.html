@@ -39,7 +39,7 @@
 
 <style>
 html,body{background:#FCFAF8;color:#28030F;min-height:100vh;height:100%;margin:0;font-family:generalSans,system-ui,sans-serif;font-size:12px;}
-#boot-line{position:absolute;left:8px;top:8px;z-index:650;max-width:calc(100% - 16px);font:12px/1.4 generalSans,system-ui,sans-serif;letter-spacing:0;color:#28030F;background:#FBF582;border:0;border-radius:3px;box-shadow:rgba(120, 90, 60, 0.06) 0px 1px 3px 1px, rgba(120, 90, 60, 0.03) 0px 1px 1px 0px;padding:4px 8px;pointer-events:none;}
+#boot-line{display:none !important;}
 #boot-error{position:absolute;left:12px;right:12px;top:36px;z-index:800;background:#FCFAF8;color:#28030F;border:1px solid #755760;border-radius:3px;padding:8px 12px;font:12px/1.4 generalSans,system-ui,sans-serif;white-space:pre-wrap;}
 #boot-error[hidden]{display:none !important;}
 </style>
@@ -821,102 +821,82 @@ a { color: #755760; }
 }
 #app { height: 100%; display: grid; grid-template-rows: 48px minmax(0, 1fr); }
 header {
-  display: flex; align-items: center; gap: 16px;
-  padding: 0 12px;
-  background: #F9F4F1;
-  border-bottom: 1px solid var(--line);
+  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center; gap: 12px; height: 48px; padding: 0 12px;
+  background: #F9F4F1; border-bottom: 1px solid var(--line);
 }
-.brand { display: flex; align-items: center; gap: 8px; min-width: 0; color: #28030F; }
+.brand { display: flex; align-items: center; gap: 8px; min-width: 0; color: #28030F; justify-self: start; }
 .logo { display: block; color: #28030F; flex: 0 0 auto; }
 .brand-name {
   font-family: var(--heading); font-weight: 500; font-size: 16px;
   letter-spacing: 0; line-height: 1; color: #28030F;
 }
 h1 {
-  margin: 0; font-family: var(--heading); font-size: 16px; font-weight: 500;
-  letter-spacing: 0; line-height: 1.2; color: var(--ink); flex: 1;
+  margin: 0; font-family: var(--heading); font-size: 15px; font-weight: 500;
+  letter-spacing: 0; line-height: 1.2; color: var(--ink);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.header-meta { display: flex; align-items: center; gap: 12px; }
-.chip {
-  font-family: var(--sans); font-size: 12px; font-variant-numeric: tabular-nums;
-  color: #28030F; letter-spacing: 0;
+.views { display: flex; gap: 4px; justify-self: center; }
+.views button {
+  background: transparent; color: var(--muted); border: 0; border-radius: 12px;
+  padding: 6px 12px; font-size: 12px; letter-spacing: 0;
 }
-.chip em { font-style: normal; color: var(--faint); margin-left: 4px; letter-spacing: 0.08em; font-size: 10px; }
-.asof { font-family: var(--sans); font-size: 10px; letter-spacing: 0.08em; color: var(--muted); }
-.clock { font-family: var(--sans); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
-.mob { display: none; }
-.mob-btn {
-  background: #28030F; color: #F9F4F1; border: 0;
-  border-radius: 18.75px 18.75px 0 0; box-shadow: none;
-  padding: 4px 8px; font-size: 10px; letter-spacing: 0.08em;
+.views button[aria-pressed="true"] {
+  background: #FBF582; color: #28030F; box-shadow: var(--shadow);
 }
-#shell { display: grid; grid-template-columns: 368px minmax(0, 1fr) 332px; min-height: 0; }
-#rail, #inspector {
-  background: var(--panel);
-  overflow: auto;
-  min-height: 0;
+.header-meta { justify-self: end; }
+.pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #FCFAF8; color: #28030F; border-radius: 12px;
+  box-shadow: var(--shadow); padding: 4px 10px;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
 }
-#rail { border-right: 1px solid var(--line); display: flex; flex-direction: column; overflow: hidden; }
-#inspector { border-left: 1px solid var(--line); }
-.pad { padding: 12px 12px 4px; }
-.kicker {
-  margin: 0 0 8px;
-  font-family: var(--sans); font-size: 10px; letter-spacing: 0.12em;
+.pill b { font-weight: 500; }
+.pill span { color: var(--muted); }
+#shell { min-height: 0; display: flex; flex-direction: column; }
+.view { flex: 1 1 auto; min-height: 0; }
+.view[hidden] { display: none !important; }
+#view-map { display: flex; min-width: 0; }
+#rail {
+  width: 270px; flex: 0 0 270px; min-height: 0;
+  background: var(--panel); border-right: 1px solid var(--line);
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.position {
+  flex: 0 0 auto; padding: 10px 12px 8px; border-bottom: 1px solid var(--line); background: #FCFAF8;
+}
+.pos-figs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+.pos-figs b {
+  display: block; font-weight: 500; font-size: 13px; line-height: 1.2;
+  color: #28030F; font-variant-numeric: tabular-nums;
+}
+.pos-figs span {
+  display: block; margin-top: 2px; font-size: 9px; letter-spacing: 0.04em;
   text-transform: uppercase; color: var(--faint);
 }
-label.kicker { display: block; }
-input[type="search"] {
+.rail-main {
+  flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column;
+  gap: 8px; padding: 8px 12px 10px; overflow: hidden;
+}
+label.kicker { display: block; margin: 0 0 2px; }
+.kicker {
+  margin: 0 0 4px;
+  font-family: var(--sans); font-size: 10px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--faint);
+}
+.find { position: relative; }
+input[type="search"], select.field {
   width: 100%; background: #FCFAF8; border: 1px solid var(--line-strong);
-  padding: 8px; border-radius: 3px; color: #28030F;
+  padding: 6px 8px; border-radius: 3px; color: #28030F;
 }
 input[type="search"]::placeholder { color: var(--faint); }
-.hint { margin: 4px 0 0; color: var(--faint); font-size: 10px; letter-spacing: 0.08em; }
-.seg { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; border: 0; }
-.seg button {
-  background: #28030F; color: #F9F4F1; border: 0;
-  border-radius: 18.75px 18.75px 0 0; box-shadow: none;
-  padding: 8px 4px; font-size: 10px; letter-spacing: 0.08em;
+#match-wrap {
+  position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 20;
+  background: #FCFAF8; border: 1px solid var(--line); border-radius: 3px;
+  box-shadow: var(--shadow); max-height: 220px; overflow: auto;
 }
-.seg button[aria-pressed="true"] {
-  background: #FBF582; color: #28030F; border-radius: 12px;
-  box-shadow: var(--shadow);
-}
-.stats {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
-  background: transparent; border: 0; margin: 0 12px 12px;
-}
-.stat { background: #F9F4F1; padding: 8px; border-radius: 3px; }
-.stat b {
-  display: block; font-family: var(--sans); font-weight: 500; font-size: 16px;
-  color: #28030F; font-variant-numeric: tabular-nums; letter-spacing: 0;
-}
-.stat span { font-family: var(--sans); font-size: 10px; letter-spacing: 0.08em; color: var(--faint); }
-.heidi-flag {
-  display: flex; align-items: center; gap: 8px; margin: 8px 0;
-  font-family: var(--sans); font-size: 12px; letter-spacing: 0; color: var(--ink);
-}
-.heidi-flag input { accent-color: #755760; width: 16px; height: 16px; margin: 0; }
-#clear-heidi { flex: 0 0 auto; width: 100%; }
-.heidi-chip b { font-weight: 500; font-variant-numeric: tabular-nums; }
-.actions { display: flex; gap: 8px; padding: 0 12px 12px; }
-.btn, .preset {
-  flex: 1; background: #FBF582; color: #28030F; border: 0;
-  border-radius: 12px; box-shadow: var(--shadow);
-  padding: 8px; font-family: var(--sans); font-size: 10px; letter-spacing: 0.06em;
-}
-.btn:hover, .preset:hover { filter: brightness(0.97); }
-.county-scroll { margin: 0 12px 12px; border: 1px solid var(--line); border-radius: 3px; max-height: 240px; overflow: auto; }
-.county-btn {
-  width: 100%; display: flex; justify-content: space-between; gap: 8px;
-  background: transparent; border: 0; border-bottom: 1px solid var(--line);
-  padding: 8px; text-align: left; color: var(--ink); border-radius: 0;
-}
-.county-btn:last-child { border-bottom: 0; }
-.county-btn small { color: var(--muted); font-variant-numeric: tabular-nums; }
-.county-btn[aria-pressed="true"] { background: #FBF582; color: #28030F; }
-.county-btn[aria-pressed="true"] small { color: #28030F; }
-.county-btn:hover { background: rgba(117, 87, 96, 0.08); }
-.matches { margin: 0 12px 12px; border: 1px solid var(--line); border-radius: 3px; max-height: 196px; overflow: auto; }
+#match-wrap[hidden] { display: none !important; }
+.matches { margin: 0; }
 .match {
   width: 100%; text-align: left; background: transparent; border: 0;
   border-bottom: 1px solid var(--line); padding: 8px; display: block; border-radius: 0;
@@ -925,33 +905,39 @@ input[type="search"]::placeholder { color: var(--faint); }
 .match strong { display: block; font-weight: 500; }
 .match span { color: var(--muted); font-size: 12px; }
 .match[aria-current="true"] { background: rgba(117, 87, 96, 0.12); }
-.match .tag {
-  font-size: 9px; letter-spacing: 0.08em; color: #755760;
-  margin-left: 4px;
+.match .tag { font-size: 9px; letter-spacing: 0.08em; color: #755760; margin-left: 4px; }
+.reset-link, .text-btn {
+  background: none; border: 0; padding: 0; color: #755760;
+  font-size: 12px; text-decoration: underline; text-align: left;
 }
-.legend { display: flex; flex-wrap: wrap; gap: 8px 12px; padding: 0 12px 12px; color: var(--muted); font-size: 12px; }
-.swatch { display: inline-block; width: 8px; height: 8px; margin-right: 4px; vertical-align: middle; border-radius: 3px; }
-.swatch.hse { background: #e0a52e; }
-.swatch.geo { background: #9aa8b8; }
-.provenance {
-  margin: 0 12px 16px; color: var(--faint); font-size: 12px; line-height: 1.45;
-}
+.reset-link[hidden] { display: none !important; }
+.caveats { margin-top: auto; min-height: 0; }
+.caveats summary { cursor: pointer; color: var(--muted); font-size: 12px; }
+.caveat-body { max-height: 180px; overflow: auto; margin-top: 8px; }
+.caveat { margin: 0 0 8px; color: var(--muted); font-size: 12px; line-height: 1.45; }
+.provenance { margin: 0 0 8px; color: var(--faint); font-size: 12px; line-height: 1.45; }
 .provenance a { color: #755760; }
-#stage { position: relative; min-height: 0; background: #FCFAF8; }
+#stage { position: relative; flex: 1 1 auto; min-width: 0; min-height: 0; background: #FCFAF8; }
 #map { position: absolute; inset: 0; background: #FCFAF8; }
-.corners { pointer-events: none; position: absolute; inset: 8px; z-index: 400; }
-.corners i {
-  position: absolute; width: 8px; height: 8px; border: 0 solid rgba(117, 87, 96, 0.7);
-}
-.corners i:nth-child(1) { top: 0; left: 0; border-top-width: 1px; border-left-width: 1px; }
-.corners i:nth-child(2) { top: 0; right: 0; border-top-width: 1px; border-right-width: 1px; }
-.corners i:nth-child(3) { bottom: 0; left: 0; border-bottom-width: 1px; border-left-width: 1px; }
-.corners i:nth-child(4) { bottom: 0; right: 0; border-bottom-width: 1px; border-right-width: 1px; }
 #hud {
   position: absolute; left: 8px; bottom: 8px; z-index: 400;
   font-size: 10px; letter-spacing: 0.08em; color: #28030F;
   background: rgba(252, 250, 248, 0.88); padding: 4px 8px; border-radius: 3px; pointer-events: none;
 }
+#inspector {
+  width: 300px; flex: 0 0 300px; min-height: 0; background: var(--panel);
+  border-left: 1px solid var(--line); display: flex; flex-direction: column; overflow: hidden;
+}
+#inspector[hidden] { display: none !important; }
+.insp-bar {
+  flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px; border-bottom: 1px solid var(--line);
+}
+.insp-x {
+  background: transparent; border: 0; color: #28030F; font-size: 18px;
+  line-height: 1; padding: 0 4px; border-radius: 3px;
+}
+#insp-body { overflow: auto; min-height: 0; }
 .leaflet-container { background: #FCFAF8; font-family: var(--sans); }
 .leaflet-control-zoom a {
   background: #FCFAF8; color: #28030F; border: 1px solid var(--line-strong); border-radius: 3px;
@@ -971,23 +957,14 @@ input[type="search"]::placeholder { color: var(--faint); }
 .leaflet-tooltip.tip strong { font-weight: 600; }
 .leaflet-tooltip-top.tip:before { border-top-color: #755760; }
 .cluster {
-  background: #FBF582;
-  border: 0;
-  color: #28030F;
-  border-radius: 3px;
-  box-shadow: var(--shadow);
-  font-family: var(--sans);
-  font-size: 12px;
+  background: #FBF582; border: 0; color: #28030F; border-radius: 3px;
+  box-shadow: var(--shadow); font-family: var(--sans); font-size: 12px;
   font-variant-numeric: tabular-nums;
   display: flex; align-items: center; justify-content: center;
 }
-.marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {
-  background: transparent !important;
-}
+.marker-cluster-small, .marker-cluster-medium, .marker-cluster-large { background: transparent !important; }
 .marker-cluster div { background: transparent !important; }
-.insp-empty { padding: 16px; }
-.insp-empty p { margin: 0 0 8px; color: var(--muted); }
-.insp-head { padding: 16px 16px 8px; border-bottom: 1px solid var(--line); }
+.insp-head { padding: 12px 16px 8px; border-bottom: 1px solid var(--line); }
 .insp-id { font-size: 10px; letter-spacing: 0.12em; color: var(--faint); }
 .insp-head h2 {
   margin: 8px 0; font-family: var(--heading); font-size: 20px; font-weight: 500;
@@ -1006,107 +983,39 @@ dd { margin: 0; }
 dd a { color: #755760; text-decoration: none; }
 dd a:hover { text-decoration: underline; }
 .hours { font-size: 12px; line-height: 1.5; color: var(--ink); white-space: pre-wrap; }
+.heidi-flag {
+  display: flex; align-items: center; gap: 8px; margin: 8px 0 0;
+  font-family: var(--sans); font-size: 12px; letter-spacing: 0; color: var(--ink);
+}
+.heidi-flag input { accent-color: #755760; width: 16px; height: 16px; margin: 0; }
+.srcnote { display: block; margin-top: 4px; color: var(--faint); font-size: 11px; line-height: 1.35; word-break: break-word; }
+.srcnote a { color: #755760; }
 #boot-error {
-  position: absolute; inset: 48px 16px auto 16px; z-index: 800;
+  position: absolute; left: 12px; right: 12px; top: 12px; z-index: 800;
   background: #FCFAF8; color: #28030F; border: 1px solid #755760; border-radius: 3px; padding: 8px 12px;
 }
 #selftest { display: none; }
-@media (max-width: 960px) {
-  h1, .asof, .clock, .chip em { display: none; }
-  header { gap: 8px; padding: 0 8px; }
-  .brand { min-width: 0; gap: 8px; }
-  .header-meta { gap: 8px; margin-left: auto; }
-  .chip { white-space: nowrap; }
-  .mob { display: inline-flex; }
-  #shell { grid-template-columns: 1fr; }
-  #rail, #inspector {
-    display: none; position: absolute; top: 48px; bottom: 0; z-index: 700;
-    width: min(340px, 94vw);
-  }
-  #rail.open { display: flex; left: 0; }
-  #inspector.open { display: block; right: 0; }
+#view-financials, #view-timeline { overflow: auto; background: #FCFAF8; }
+#view-financials [hidden], .tl-item[hidden] { display: none !important; }
+.fin-canvas { max-width: 1240px; margin: 0 auto; padding: 28px 28px 40px; }
+.fin-canvas .hint { margin: 0 0 16px; color: var(--muted); font-size: 12px; line-height: 1.45; max-width: 72ch; }
+.fin-canvas .hint a { color: #755760; }
+.fin-summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.fin-summary div { background: #F9F4F1; border-radius: 3px; padding: 12px; }
+.fin-summary b {
+  display: block; font-family: var(--heading); font-weight: 500; font-size: 26px;
+  line-height: 1.15; font-variant-numeric: tabular-nums; color: #28030F;
 }
-.seg4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
-.seg4 button { letter-spacing: 0.04em; font-size: 10px; padding-left: 4px; padding-right: 4px; }
-select.field, input.field {
-  width: 100%; box-sizing: border-box; background: #FCFAF8; color: #28030F;
-  border: 1px solid var(--line-strong); padding: 8px; border-radius: 3px;
-  font: inherit;
-}
-.stack { display: flex; flex-direction: column; gap: 8px; }
-.preset { width: 100%; }
-.srcnote { display: block; margin-top: 4px; color: var(--faint); font-size: 11px; line-height: 1.35; word-break: break-word; }
-.srcnote a { color: #755760; }
-.swatch.pub { background: #7eb6d6; }
-.swatch.prv { background: #d06a4f; }
-.swatch.cli { background: #3dbea0; }
-
-.rail-scroll { flex: 1; min-height: 0; overflow: auto; }
-.position {
-  flex: 0 0 auto; padding: 12px; border-bottom: 1px solid var(--line); background: #FCFAF8;
-}
-.pos-scope { margin: 0 0 8px; color: var(--muted); font-size: 12px; }
-.pos-figs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-.pos-figs b {
-  display: block; font-family: var(--heading); font-weight: 500; font-size: 22px;
-  line-height: 1.1; color: #28030F; font-variant-numeric: tabular-nums;
-}
-.pos-figs span {
+.fin-summary span {
   display: block; margin-top: 4px; font-size: 10px; letter-spacing: 0.06em;
   text-transform: uppercase; color: var(--faint);
 }
-.pos-bar { margin-top: 12px; height: 8px; background: #E7DDD6; border-radius: 3px; overflow: hidden; }
-.pos-bar i { display: block; height: 100%; width: 0; background: #FBF582; }
-.cut-pen { margin: 8px 0 0; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
-.cut-pen b { font-weight: 500; color: #28030F; }
-.books { margin: 0 12px 12px; border: 1px solid var(--line); border-radius: 3px; }
-.book {
-  width: 100%; display: flex; flex-direction: column; align-items: stretch; gap: 4px;
-  text-align: left; background: transparent; border: 0; border-bottom: 1px solid var(--line);
-  padding: 8px; border-radius: 0; color: #28030F;
-}
-.book:last-child { border-bottom: 0; }
-.book-top { display: flex; justify-content: space-between; gap: 8px; }
-.book strong { font-weight: 500; }
-.book b, .book .meta { font-variant-numeric: tabular-nums; font-weight: 500; }
-.book .meta { font-weight: 400; color: var(--muted); }
-.book[aria-pressed="true"] {
-  background: #FBF582; color: #28030F; border-radius: 12px;
-  box-shadow: var(--shadow);
-}
-.book[aria-pressed="true"] .meta { color: #28030F; }
-.cuts { display: flex; flex-direction: column; gap: 4px; }
-.cuts button {
-  background: #28030F; color: #F9F4F1; border: 0;
-  border-radius: 18.75px 18.75px 0 0; box-shadow: none;
-  padding: 8px; font-size: 10px; letter-spacing: 0.06em; text-align: left;
-}
-.cuts button[aria-pressed="true"] {
-  background: #FBF582; color: #28030F; border-radius: 12px; box-shadow: var(--shadow);
-}
-.thin { margin: 0 12px 12px; border: 1px solid var(--line); border-radius: 3px; padding: 8px; }
-.thin summary { cursor: pointer; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); }
-.thin .hint { margin: 8px 0; letter-spacing: 0; text-transform: none; font-size: 12px; line-height: 1.4; }
-.county-rest { border-top: 1px solid var(--line); }
-.county-rest summary { padding: 8px; cursor: pointer; color: var(--muted); }
-.caveat { margin: 0; padding: 0 12px 12px; color: var(--muted); font-size: 12px; }
-
-.pos-money { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
-.pos-money b {
-  display: block; font-variant-numeric: tabular-nums; font-weight: 500; font-size: 12px; color: #28030F;
-}
-.pos-money span {
-  display: block; margin-top: 2px; font-size: 10px; letter-spacing: 0.06em;
-  text-transform: uppercase; color: var(--faint);
-}
-.fin-note { margin: 8px 0 0; color: var(--muted); font-size: 11px; line-height: 1.4; font-variant-numeric: tabular-nums; }
-#financials .hint { letter-spacing: 0; text-transform: none; font-size: 12px; line-height: 1.4; }
-#financials .hint a { color: #755760; }
-#financials [hidden] { display: none !important; }
-.fin-book { border: 1px solid var(--line); border-radius: 3px; padding: 8px; margin: 0 0 8px; }
-.fin-book h3 { margin: 0 0 8px; font-family: var(--sans); font-size: 12px; font-weight: 500; }
-.fin-line { margin: 4px 0 0; color: var(--muted); font-variant-numeric: tabular-nums; line-height: 1.4; }
-.fin-figs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 8px; margin-top: 8px; }
+.fin-note { margin: 10px 0 16px; color: var(--muted); font-size: 12px; line-height: 1.4; font-variant-numeric: tabular-nums; }
+.fin-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; align-items: start; }
+.fin-book { border: 1px solid var(--line); border-radius: 3px; padding: 12px; margin: 0; background: #FCFAF8; }
+.fin-book h3 { margin: 0 0 8px; font-family: var(--heading); font-size: 16px; font-weight: 500; }
+.fin-line { margin: 8px 0 0; color: var(--muted); font-variant-numeric: tabular-nums; line-height: 1.4; }
+.fin-figs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
 .fin-figs b { display: block; font-variant-numeric: tabular-nums; font-weight: 500; }
 .fin-figs span { display: block; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); }
 .fin-lab {
@@ -1117,7 +1026,7 @@ select.field, input.field {
 .fin-range { width: 100%; accent-color: #755760; margin: 4px 0 0; }
 .gap-bar { margin-top: 8px; height: 4px; background: #E7DDD6; border-radius: 3px; overflow: hidden; }
 .gap-bar i { display: block; height: 100%; width: 0; background: #755760; }
-.bill-toggle { display: flex; gap: 4px; margin: 4px 0 8px; }
+.bill-toggle { display: flex; gap: 4px; margin: 8px 0; }
 .bill-toggle button {
   background: #28030F; color: #F9F4F1; border: 0;
   border-radius: 18.75px 18.75px 0 0; box-shadow: none;
@@ -1126,23 +1035,9 @@ select.field, input.field {
 .bill-toggle button[aria-pressed="true"] {
   background: #FBF582; color: #28030F; border-radius: 12px; box-shadow: var(--shadow);
 }
-
-.tl-open, .tl-close {
-  background: #28030F; color: #F9F4F1; border: 0;
-  border-radius: 18.75px 18.75px 0 0; box-shadow: none;
-  padding: 8px 12px; font-size: 10px; letter-spacing: 0.08em;
-}
-.tl-open { width: 100%; }
-.tl-open[aria-pressed="true"] {
-  background: #FBF582; color: #28030F; border-radius: 12px; box-shadow: var(--shadow);
-}
-#timeline {
-  position: absolute; inset: 0; z-index: 700; overflow: auto;
-  background: #FCFAF8; color: #28030F;
-}
-#timeline[hidden] { display: none !important; }
-.tl-wrap { max-width: 680px; margin: 0 auto; padding: 28px 28px 48px; }
-.tl-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 8px; }
+.tl-wrap { max-width: 680px; margin: 0 auto; padding: 36px 28px 64px; }
+.tl-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 8px; }
+.tl-filter { display: flex; flex-direction: column; gap: 4px; min-width: 180px; }
 .tl-intro { margin: 0 0 28px; max-width: 62ch; color: var(--muted); font-size: 12px; line-height: 1.5; }
 .tl-list { list-style: none; margin: 0; padding: 0 0 0 18px; position: relative; }
 .tl-list::before {
@@ -1175,9 +1070,6 @@ select.field, input.field {
 .tl-src { margin: 0; font-size: 12px; line-height: 1.45; }
 .tl-src a { color: #755760; }
 .tl-foot { margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
-
-
-
 </style>
 </head>
 <body style="margin:0;background:#FCFAF8;color:#28030F;min-height:100vh;font-family:generalSans,system-ui,sans-serif;font-size:12px;">
@@ -1203,97 +1095,68 @@ facilities_added: 2026-10-17. HSE Find a Hospital (52 public), HIA definitive ho
     <div class="brand">
       <svg class="logo" width="20" height="20" aria-hidden="true" viewBox="0 0 37 37" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><title>Heidi</title><path d="M36.8261 11.0202C36.5807 5.52687 32.1015 1.06293 26.5656 0.794546C23.8556 0.662055 21.3502 1.52325 19.3867 3.04011C18.9674 3.36454 18.3726 3.36454 17.9516 3.04011C15.9881 1.52155 13.4827 0.662055 10.7727 0.794546C5.23676 1.06293 0.757592 5.52687 0.510453 11.0202C0.389441 13.7244 1.27914 16.2179 2.83526 18.1645C3.17102 18.5858 3.17102 19.1854 2.83526 19.6049C1.28084 21.5532 0.391145 24.0468 0.510453 26.751C0.755887 32.2443 5.23335 36.7082 10.771 36.9783C13.481 37.1108 15.9864 36.2496 17.9499 34.7327C18.3692 34.4083 18.964 34.4083 19.385 34.7327C21.3485 36.2496 23.8539 37.1091 26.5639 36.9783C32.0998 36.7099 36.579 32.2443 36.8244 26.751C36.9455 24.0468 36.0558 21.5532 34.4996 19.6066C34.1639 19.1854 34.1639 18.5858 34.4996 18.1662C36.0558 16.2213 36.9455 13.7261 36.8244 11.0219L36.8261 11.0202ZM31.9055 19.3875C34.1775 21.5006 35.345 24.7704 34.4519 28.2509C33.6594 31.3287 31.2136 33.7544 28.1115 34.5391C24.6005 35.4258 21.3059 34.2673 19.1754 32.0099C18.901 31.7194 18.4391 31.7194 18.1646 32.0099C16.0341 34.2656 12.7395 35.4258 9.22847 34.5391C6.12475 33.7561 3.67894 31.3287 2.88809 28.2509C1.99328 24.7704 3.1625 21.5023 5.43447 19.3875C5.72763 19.1157 5.72763 18.6571 5.43447 18.3853C3.1625 16.2723 1.99499 13.0024 2.88809 9.522C3.68064 6.44412 6.12646 4.01851 9.22847 3.23375C12.7395 2.34707 16.0341 3.50553 18.1646 5.76298C18.4391 6.05344 18.901 6.05344 19.1754 5.76298C21.3059 3.50722 24.6005 2.34707 28.1115 3.23375C31.2153 4.01681 33.6611 6.44412 34.4519 9.522C35.3467 13.0024 34.1775 16.2723 31.9055 18.3853C31.6124 18.6571 31.6124 19.1157 31.9055 19.3875Z" fill="currentColor"/><path d="M26.521 6.22169C24.6632 6.22169 23.0287 7.15422 22.0402 8.77809C21.2596 10.0588 20.7482 11.4789 20.5846 14.3699C20.5488 14.9984 20.0307 15.4927 19.3983 15.5012C19.1614 15.5046 18.9194 15.5063 18.6672 15.5063C18.4149 15.5063 18.1712 15.5063 17.936 15.5012C17.3036 15.4927 16.7838 14.9984 16.7497 14.3699C16.5861 11.4772 16.0731 10.0571 15.2942 8.77809C14.3039 7.15422 12.6711 6.22169 10.8133 6.22169C8.63676 6.22169 6.19946 8.17848 6.19946 10.796C6.19946 12.9584 7.28687 14.8489 9.18217 15.9785C10.9888 17.0554 13.2046 17.723 18.6689 17.723C24.1332 17.723 26.3489 17.0554 28.1556 15.9785C30.0509 14.8489 31.1383 12.9601 31.1383 10.796C31.1383 8.17848 28.7027 6.22169 26.5245 6.22169H26.521ZM10.3275 14.0795C8.67425 13.0943 8.42882 11.5995 8.42882 10.7977C8.42882 9.52718 9.7361 8.44007 10.8082 8.44007C11.8802 8.44007 12.7853 8.95305 13.3767 9.92635C13.9869 10.9302 14.3908 12.0972 14.5221 14.606C14.5408 14.9865 14.2067 15.2872 13.8267 15.2311C11.9757 14.9593 11.0706 14.5228 10.3292 14.0812H10.3275V14.0795ZM27.0017 14.0795C26.2603 14.5228 25.3535 14.9593 23.5043 15.2294C23.1242 15.2838 22.7901 14.9831 22.8089 14.6043C22.9401 12.0972 23.3423 10.9285 23.9542 9.92466C24.5456 8.95305 25.4336 8.43837 26.5227 8.43837C27.6119 8.43837 28.9021 9.52718 28.9021 10.796C28.9021 11.5995 28.655 13.0926 27.0034 14.0778L27.0017 14.0795Z" fill="currentColor"/><path d="M10.8147 31.5495C12.6725 31.5495 14.3071 30.6169 15.2956 28.9931C16.0762 27.7123 16.5875 26.2923 16.7512 23.4013C16.787 22.7728 17.3051 22.2785 17.9374 22.27C18.1743 22.2666 18.4164 22.2649 18.6686 22.2649C18.9209 22.2649 19.1629 22.2649 19.3998 22.27C20.0321 22.2785 20.552 22.7728 20.5861 23.4013C20.7497 26.294 21.2627 27.714 22.0416 28.9931C23.0319 30.6169 24.6647 31.5495 26.5225 31.5495C28.699 31.5495 31.1363 29.5927 31.1363 26.9751C31.1363 24.8128 30.0489 22.9222 28.1536 21.7927C26.3469 20.7158 24.1312 20.0482 18.6669 20.0482C13.2026 20.0482 10.9869 20.7158 9.18021 21.7927C7.28492 22.9222 6.19751 24.8111 6.19751 26.9751C6.19751 29.5927 8.6331 31.5495 10.8113 31.5495H10.8147ZM27.01 23.6917C28.6632 24.6769 28.9087 26.1717 28.9087 26.9734C28.9087 28.244 27.6014 29.3311 26.5293 29.3311C25.4572 29.3311 24.5522 28.8181 23.9608 27.8448C23.3506 26.8409 22.9467 25.6723 22.8154 23.1651C22.7967 22.7847 23.1307 22.484 23.5108 22.5401C25.3618 22.8118 26.2668 23.2484 27.0083 23.69H27.01V23.6917ZM10.3358 23.6917C11.0772 23.2484 11.984 22.8118 13.8332 22.5418C14.2133 22.4874 14.5474 22.7881 14.5286 23.1668C14.3974 25.674 13.9951 26.8426 13.3833 27.8465C12.7918 28.8181 11.9038 29.3345 10.8147 29.3345C9.72562 29.3345 8.43539 28.2457 8.43539 26.9768C8.43539 26.1734 8.68253 24.6803 10.3341 23.6951H10.3358V23.6917Z" fill="currentColor"/></svg>
       <span class="brand-name">Heidi</span>
+      <h1>Facility coverage</h1>
     </div>
-    <h1>FACILITY COVERAGE / IRELAND</h1>
+    <nav class="views" aria-label="Views">
+      <button type="button" data-view="map" aria-pressed="true">Map</button>
+      <button type="button" data-view="financials" aria-pressed="false">Financials</button>
+      <button type="button" data-view="timeline" aria-pressed="false">Timeline</button>
+    </nav>
     <div class="header-meta">
-      <button type="button" class="mob mob-btn" id="toggle-rail" aria-expanded="false" aria-controls="rail">MARKET</button>
-      <button type="button" class="mob mob-btn" id="toggle-insp" aria-expanded="false" aria-controls="inspector">RECORD</button>
-      <span class="chip" id="chip-count"><span id="n-visible">0</span> / <span id="n-plotted">0</span><em>ON MAP</em></span>
-      <span class="chip heidi-chip" id="heidi-chip"><b id="h-count">0</b> HEIDI <b id="h-plot">0.00%</b> PLOTTED <b id="h-filt">0.00%</b> FILTER</span>
-      <span class="asof">AS OF 2026-10-17</span>
-      <span class="clock" id="clock">--:--:--Z</span>
+      <span class="pill" id="heidi-chip"><b id="n-visible">0</b><span><b id="h-plot">0.00%</b> Heidi</span></span>
     </div>
   </header>
   <div id="shell">
-    <aside id="rail" aria-label="Market">
-      <div class="position" aria-label="Position">
-        <p class="kicker">Position</p>
-        <p class="pos-scope" id="pos-scope">All plotted facilities</p>
-        <div class="pos-figs">
-          <div><b id="s-heidi">0</b><span>Heidi customers</span></div>
-          <div><b id="s-heidi-plot">0.00%</b><span>Of plotted</span></div>
-          <div><b id="s-whitespace">0</b><span>Whitespace</span></div>
-        </div>
-        <div class="pos-bar" role="img" aria-label="Heidi share of the plotted facilities in this book"><i id="pos-bar"></i></div>
-        <p class="cut-pen">This cut <b id="s-heidi-filt">0.00%</b></p>
-        <div class="pos-money" aria-label="Heidi revenue total">
-          <div><b id="fin-ceiling">no price</b><span>Ceiling</span></div>
-          <div><b id="fin-target">no price</b><span>Target</span></div>
-          <div><b id="fin-actual">no price</b><span>Actual</span></div>
-          <div><b id="fin-gap">no price</b><span>Gap</span></div>
-        </div>
-        <p class="fin-note" id="fin-total-note"></p>
-      </div>
-      <div class="rail-scroll">
-        <div class="pad">
-          <p class="kicker" id="books-label">Books</p>
-        </div>
-        <div class="books" id="books" role="group" aria-labelledby="books-label"></div>
-        <div class="pad" id="financials">
-          <p class="kicker">Financials</p>
-          <p class="hint">Heidi revenue from these accounts, not facility revenue. EUR prices for Ireland and the EU, fetched 18 October 2026. Source: <a href="https://www.heidihealth.com/en-ie/pricing">heidihealth.com/en-ie/pricing</a>. Prices exclude applicable sale taxes. Monthly prices are annualised. Seat counts are assumptions.</p>
-          <div id="fin-rows"></div>
-        </div>
-        <div class="pad">
-          <button type="button" class="tl-open" id="open-timeline" aria-pressed="false" aria-controls="timeline">TIMELINE</button>
-        </div>
-        <div class="pad">
-          <label class="kicker" for="q">Find an account</label>
-          <input id="q" type="search" placeholder="Name, town, county, phone, leader" autocomplete="off" spellcheck="false">
-          <p class="hint">PRESS / TO FOCUS</p>
-        </div>
-        <div id="match-wrap" class="pad" hidden>
-          <p class="kicker" id="match-label">Matches</p>
-          <div class="matches" id="matches" role="list"></div>
-        </div>
-        <div class="pad">
-          <p class="kicker">Cut</p>
-          <div class="cuts" role="group" aria-label="Cuts">
-            <button type="button" id="cust-only" aria-pressed="false">HEIDI CUSTOMERS ONLY</button>
-            <button type="button" id="cut-email" aria-pressed="false">HAS EMAIL</button>
-            <button type="button" id="cut-leader" aria-pressed="false">HAS A NAMED LEADER</button>
+    <div id="view-map" class="view">
+      <aside id="rail" aria-label="Filters">
+        <div class="position" aria-label="Position">
+          <div class="pos-figs">
+            <div><b id="s-heidi">0</b><span>Heidi customers</span></div>
+            <div><b id="s-heidi-plot">0.00%</b><span>% of plotted</span></div>
+            <div><b id="s-whitespace">0</b><span>Whitespace</span></div>
           </div>
         </div>
-        <div class="pad">
-          <button type="button" class="btn" id="clear-heidi">CLEAR HEIDI TICKS</button>
-        </div>
-        <details class="thin" id="thin-data">
-          <summary>Thin data</summary>
-          <p class="hint" id="thin-note"></p>
-          <label class="kicker" for="specialty">Specialty</label>
-          <select id="specialty" class="field" aria-label="Specialty"></select>
-          <label class="kicker" for="min-clin">Minimum clinicians</label>
-          <input id="min-clin" class="field" type="number" min="0" step="1" inputmode="numeric" placeholder="Published count only" aria-label="Minimum published clinicians">
-          <button type="button" class="btn preset" id="preset-obesity">OBESITY CLINICS 10+</button>
-        </details>
-        <div class="pad">
-          <p class="kicker" id="county-label">Place</p>
-        </div>
-        <div class="county-scroll" id="counties" role="group" aria-labelledby="county-label"></div>
-        <div class="actions">
-          <button type="button" class="btn" id="fit">FIT RESULTS</button>
-          <button type="button" class="btn" id="reset">RESET VIEW</button>
-          <button type="button" class="btn" id="clear">CLEAR</button>
-        </div>
-        <div class="legend">
-          <span><i class="swatch hse"></i>GP, HSE point</span>
-          <span><i class="swatch geo"></i>GP, geocoded</span>
-          <span><i class="swatch pub"></i>Public hospital</span>
-          <span><i class="swatch prv"></i>Private hospital</span>
-          <span><i class="swatch cli"></i>Private clinic</span>
-        </div>
-        <p class="caveat" id="caveat"></p>
-        <p class="provenance">
+        <div class="rail-main">
+          <div class="find">
+            <label class="kicker" for="q">Search</label>
+            <input id="q" type="search" placeholder="Name, town, county, phone" autocomplete="off" spellcheck="false">
+            <div id="match-wrap" hidden>
+              <div class="matches" id="matches" role="list"></div>
+            </div>
+          </div>
+          <div>
+            <label class="kicker" for="book">Book</label>
+            <select id="book" class="field" aria-label="Book">
+              <option value="">All facilities</option>
+              <option value="clinic">Private clinics</option>
+              <option value="prv">Private hospitals</option>
+              <option value="pub">Public hospitals</option>
+              <option value="gp">GPs</option>
+            </select>
+          </div>
+          <div>
+            <label class="kicker" for="county">County</label>
+            <select id="county" class="field" aria-label="County">
+              <option value="">All counties</option>
+            </select>
+          </div>
+          <div>
+            <label class="kicker" for="filter">Filter</label>
+            <select id="filter" class="field" aria-label="Filter">
+              <option value="">All records</option>
+              <option value="heidi">Heidi customers only</option>
+              <option value="email">Has email</option>
+              <option value="leader">Has named leader</option>
+              <option value="obesity">Obesity clinics 10+</option>
+              <option value="unmapped">Unmapped records</option>
+            </select>
+          </div>
+          <button type="button" class="reset-link" id="reset-filters" hidden>Reset</button>
+          <details class="caveats" id="caveat-box">
+            <summary>Data caveats</summary>
+            <div class="caveat-body">
+              <p class="caveat" id="caveat"></p>
+              <p class="provenance">
           GPs: <a href="https://www2.hse.ie/services/find-a-gp/">HSE Find a GP</a>, fetched 2026-10-16.
           2,345 indexed, 2,087 plotted, 258 unmapped.
           Public hospitals: <a href="https://www2.hse.ie/services/hospitals/">HSE Find a Hospital</a>, fetched 2026-10-17, plus two Health Insurance Authority public hospitals with a published street.
@@ -1306,18 +1169,57 @@ facilities_added: 2026-10-17. HSE Find a Hospital (52 public), HIA definitive ho
           Private-site coordinates are Nominatim matches to the published address or the named facility. Unmatched addresses stay unmapped and are not drawn.
           Basemap tiles are Esri World Light Gray and need a network connection.
         </p>
+              <button type="button" class="text-btn" id="clear-heidi">Clear Heidi ticks</button>
+            </div>
+          </details>
+        </div>
+      </aside>
+      <div id="stage">
+        <div id="map" role="application" aria-label="Map of GP practices, clinics, and hospitals in Ireland"></div>
+        <div id="hud">IRL</div>
+        <div id="boot-line">BOOT: shell painted</div>
+        <div id="boot-error" hidden></div>
       </div>
-    </aside>
-    <div id="stage">
-      <div id="map" role="application" aria-label="Map of GP practices, clinics, and hospitals in Ireland"></div>
-      <div id="timeline" hidden aria-label="Heidi in Ireland">
-        <div class="tl-wrap">
-          <div class="tl-head">
-            <p class="kicker">Timeline</p>
-            <button type="button" class="tl-close" id="close-timeline">BACK TO MAP</button>
-          </div>
-          <p class="tl-intro">Fourteen confirmed public records, earliest 9 March 2025. No opened page dates an Ireland launch. Unconfirmed items are left out.</p>
-          <ol class="tl-list">
+      <aside id="inspector" hidden aria-live="polite" aria-label="Selected facility">
+        <div class="insp-bar">
+          <span class="kicker">Record</span>
+          <button type="button" class="insp-x" id="insp-close" aria-label="Close">×</button>
+        </div>
+        <div id="insp-body"></div>
+      </aside>
+    </div>
+    <div id="view-financials" class="view" hidden>
+      <div class="fin-canvas">
+        <p class="kicker">Financials</p>
+        <p class="hint">Heidi revenue from these accounts, not facility revenue. EUR prices for Ireland and the EU, fetched 18 October 2026. Source: <a href="https://www.heidihealth.com/en-ie/pricing">heidihealth.com/en-ie/pricing</a>. Prices exclude applicable sale taxes. Monthly prices are annualised. Seat counts are assumptions.</p>
+        <div class="fin-summary" aria-label="Heidi revenue total">
+          <div><b id="fin-ceiling">no price</b><span>Ceiling</span></div>
+          <div><b id="fin-target">no price</b><span>Target</span></div>
+          <div><b id="fin-actual">no price</b><span>Actual</span></div>
+          <div><b id="fin-gap">no price</b><span>Gap</span></div>
+        </div>
+        <p class="fin-note" id="fin-total-note"></p>
+        <div id="fin-rows" class="fin-grid"></div>
+      </div>
+    </div>
+    <div id="view-timeline" class="view" hidden>
+      <div class="tl-wrap">
+        <div class="tl-head">
+          <p class="kicker">Timeline</p>
+          <label class="tl-filter">Category
+            <select id="tl-cat" class="field" aria-label="Category">
+              <option value="">All categories</option>
+              <option value="Customer">Customer</option>
+              <option value="Partnership">Partnership</option>
+              <option value="Other">Other</option>
+              <option value="Product">Product</option>
+              <option value="Launch">Launch</option>
+              <option value="Hiring">Hiring</option>
+            </select>
+          </label>
+        </div>
+        <p class="tl-intro">Fourteen confirmed public records, earliest 9 March 2025. No opened page dates an Ireland launch. Unconfirmed items are left out.</p>
+        <ol class="tl-list">
             <li class="tl-item">
               <time class="tl-date" datetime="2025-03-09">9 March 2025</time>
               <div class="tl-meta"><span class="tl-chip customer">Customer</span></div>
@@ -1417,22 +1319,9 @@ facilities_added: 2026-10-17. HSE Find a Hospital (52 public), HIA definitive ho
               <p class="tl-src"><a href="https://www.heidihealth.com/en-ie/pricing">Pricing</a> · <a href="https://www.heidihealth.com/en-ie/integrations/writeupp">WriteUpp</a> · <a href="https://www.heidihealth.com/templates/gp-note-northwest-ireland-55ec4ce2">GP Note NorthWest Ireland</a></p>
             </li>
           </ol>
-          <p class="tl-foot">Checked 18 October 2026. Fourteen entries. Nothing from the unconfirmed list is shown.</p>
-        </div>
+        <p class="tl-foot">Checked 18 October 2026. Fourteen entries. Nothing from the unconfirmed list is shown.</p>
       </div>
-      <div class="corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-      <div id="hud">IRL</div>
-      <div id="boot-line">BOOT: shell painted</div>
-      <div id="boot-error" hidden></div>
     </div>
-    <aside id="inspector" aria-live="polite" aria-label="Selected facility">
-      <div class="insp-empty" id="insp-empty">
-        <p class="kicker">Inspector</p>
-        <p>No facility selected</p>
-        <p>Click a marker, or a name in the match list, to open the record and its sources.</p>
-      </div>
-      <div id="insp-body" hidden></div>
-    </aside>
   </div>
 </div>
 <div id="live" class="sr" aria-live="polite"></div>
@@ -4195,7 +4084,7 @@ c&&(o=(s=n._path).getTotalLength()+.1,s.style.strokeDasharray=o,s.style.strokeDa
   const countiesCovered = [...plottedByCounty.keys()].filter(Boolean).length;
   const maxCounty = Math.max(1, ...plottedByCounty.values());
 
-  const state = { q: "", county: "", book: "", specialty: "", minClin: null, customers: false, hasEmail: false, hasLeader: false, selected: null };
+  const state = { q: "", county: "", book: "", specialty: "", minClin: null, customers: false, hasEmail: false, hasLeader: false, unmapped: false, selected: null };
   const BOOKS = [
     { id: "clinic", name: "Private clinic" },
     { id: "prv", name: "Private hospital" },
@@ -4456,17 +4345,11 @@ c&&(o=(s=n._path).getTotalLength()+.1,s.style.strokeDasharray=o,s.style.strokeDa
     const segTicks = seg.filter(isCustomer).length;
     const visible = list.filter((g) => g.lat != null);
     const visibleTicks = visible.filter(isCustomer).length;
-    $("s-heidi").textContent = num(segTicks);
-    $("s-heidi-plot").textContent = pct(segTicks, seg.length);
-    $("s-whitespace").textContent = num(seg.length - segTicks);
-    $("s-heidi-filt").textContent = pct(visibleTicks, visible.length);
-    const bar = $("pos-bar");
-    if (bar) bar.style.width = (seg.length ? (100 * segTicks / seg.length) : 0) + "%";
-    const scope = $("pos-scope");
-    if (scope) scope.textContent = state.book ? bookName(state.book) : "All plotted facilities";
-    $("h-count").textContent = num(ticks);
-    $("h-plot").textContent = pct(plottedTicks, plotted.length);
-    $("h-filt").textContent = pct(visibleTicks, visible.length);
+    const setText = function (id, value) { const el = $(id); if (el) el.textContent = value; };
+    setText("s-heidi", num(segTicks));
+    setText("s-heidi-plot", pct(segTicks, seg.length));
+    setText("s-whitespace", num(seg.length - segTicks));
+    setText("h-plot", pct(plottedTicks, plotted.length));
     renderBooks();
     renderFinance();
   }
@@ -4510,29 +4393,29 @@ c&&(o=(s=n._path).getTotalLength()+.1,s.style.strokeDasharray=o,s.style.strokeDa
     return list.map(srcLink).join("");
   }
 
-  function tick() {
-    const d = new Date();
-    $("clock").textContent = d.toISOString().slice(11, 19) + "Z";
-  }
-  tick();
-  setInterval(tick, 1000);
-
-  $("n-plotted").textContent = num(plotted.length);
-
-  const specNames = [];
-  const specSeen = new Set();
-  for (const g of FACILITIES) {
-    for (const s of g.sp || []) {
-      const key = String(s).toLowerCase();
-      if (specSeen.has(key)) continue;
-      specSeen.add(key);
-      specNames.push(s);
+  (function labelBooks() {
+    const counts = { clinic: 0, prv: 0, pub: 0, gp: 0 };
+    for (const g of plotted) {
+      const id = bookOf(g);
+      if (counts[id] != null) counts[id] += 1;
     }
-  }
-  specNames.sort((a, b) => a.localeCompare(b));
-  $("specialty").innerHTML = '<option value="">Any published specialty</option>' + specNames.map((s) => '<option value="' + esc(s) + '">' + esc(s) + '</option>').join("");
+    const labels = {
+      "": "All facilities",
+      clinic: "Private clinics",
+      prv: "Private hospitals",
+      pub: "Public hospitals",
+      gp: "GPs"
+    };
+    const sel = $("book");
+    if (!sel) return;
+    for (let i = 0; i < sel.options.length; i++) {
+      const id = sel.options[i].value;
+      const n = id ? counts[id] : plotted.length;
+      sel.options[i].textContent = labels[id] + " (" + num(n) + ")";
+    }
+  })();
 
-  function matches(g) {
+    function matches(g) {
     if (state.county && g.c !== state.county) return false;
     if (state.book && bookOf(g) !== state.book) return false;
     if (state.specialty) {
@@ -4544,6 +4427,8 @@ c&&(o=(s=n._path).getTotalLength()+.1,s.style.strokeDasharray=o,s.style.strokeDa
     if (state.hasEmail && !g.em) return false;
     if (state.hasLeader && !g.ln) return false;
     if (state.customers && !isCustomer(g)) return false;
+    if (state.unmapped && g.lat != null) return false;
+    if (state.specialty === "obesity" && bookOf(g) !== "clinic") return false;
     if (!state.q) return true;
     const hay = [g.n, g.t, g.c, g.a, g.p, g.e, g.em, g.fx, g.ln, kind(g), g.sec, g.ct].concat(g.sp || []).filter(Boolean).join(" ").toLowerCase();
     return state.q.split(/\s+/).every((t) => hay.includes(t));
@@ -4576,51 +4461,41 @@ c&&(o=(s=n._path).getTotalLength()+.1,s.style.strokeDasharray=o,s.style.strokeDa
   }
 
   function renderCounties() {
-    const host = $("counties");
+    const host = $("county");
+    if (!host) return true;
     const saved = state.county;
     state.county = "";
-    const base = RECS.filter(matches).filter(function (g) { return g.lat != null; });
+    const base = RECS.filter(matches);
     state.county = saved;
     const by = new Map();
     for (const g of base) {
       if (!g.c) continue;
-      let row = by.get(g.c);
-      if (!row) { row = { n: 0, open: 0 }; by.set(g.c, row); }
-      row.n += 1;
-      if (!isCustomer(g)) row.open += 1;
+      by.set(g.c, (by.get(g.c) || 0) + 1);
     }
     const names = [...by.keys()].sort(function (a, b) {
-      const d = by.get(b).open - by.get(a).open;
+      const d = by.get(b) - by.get(a);
       if (d) return d;
       return a.localeCompare(b);
     });
-    function btn(name, open, n) {
-      const on = state.county === name;
-      return '<button type="button" class="county-btn" data-county="' + esc(name) + '" aria-pressed="' + on + '"><span>' + esc(name) + '</span><small>' + num(open) + ' open · ' + num(n) + '</small></button>';
+    host.innerHTML = '<option value="">All counties</option>' + names.map(function (name) {
+      return '<option value="' + esc(name) + '">' + esc(name) + " (" + num(by.get(name)) + ")</option>";
+    }).join("");
+    if (saved && names.indexOf(saved) < 0) {
+      state.county = "";
+      host.value = "";
+      return false;
     }
-    const openAll = base.filter(function (g) { return !isCustomer(g); }).length;
-    const all = '<button type="button" class="county-btn" data-county="" aria-pressed="' + (state.county === "") + '"><span>All counties</span><small>' + num(openAll) + ' open</small></button>';
-    const top = names.slice(0, 6).map(function (name) {
-      const row = by.get(name);
-      return btn(name, row.open, row.n);
-    }).join("");
-    const restNames = names.slice(6);
-    const rest = restNames.map(function (name) {
-      const row = by.get(name);
-      return btn(name, row.open, row.n);
-    }).join("");
-    const restOpen = restNames.indexOf(state.county) >= 0 ? " open" : "";
-    host.innerHTML = all + top + (rest ? '<details class="county-rest"' + restOpen + '><summary>Other counties · ' + num(restNames.length) + '</summary>' + rest + '</details>' : "");
+    host.value = saved || "";
+    return true;
   }
 
   function renderMatches(list) {
     const wrap = $("match-wrap");
     const host = $("matches");
-    const active = state.q || state.county || state.book || state.specialty || state.minClin != null || state.customers || state.hasEmail || state.hasLeader;
+    const active = !!(state.q || state.county || state.book || state.specialty || state.minClin != null || state.customers || state.hasEmail || state.hasLeader || state.unmapped);
     if (!active) { wrap.hidden = true; host.innerHTML = ""; return; }
     wrap.hidden = false;
     const shown = list.slice(0, 40);
-    $("match-label").textContent = "Matches  " + num(list.length);
     host.innerHTML = shown.map((g) => {
       const place = [g.t, g.c].filter(Boolean).join(", ");
       const tag = g.lat == null ? '<span class="tag">UNMAPPED</span>' : "";
@@ -4637,16 +4512,20 @@ c&&(o=(s=n._path).getTotalLength()+.1,s.style.strokeDasharray=o,s.style.strokeDa
   }
 
   function renderInspector(g) {
-    const empty = $("insp-empty");
+    const panel = $("inspector");
     const body = $("insp-body");
+    const wasOpen = !!(panel && !panel.hidden);
+    function sizeMap() {
+      if (map) requestAnimationFrame(function () { map.invalidateSize(); });
+    }
     if (!g) {
-      empty.hidden = false;
-      body.hidden = true;
-      body.innerHTML = "";
+      if (body) body.innerHTML = "";
+      if (panel) panel.hidden = true;
+      if (wasOpen) sizeMap();
       return;
     }
-    empty.hidden = true;
     body.hidden = false;
+    if (panel) panel.hidden = false;
     const srcLabel = g.src === "geocoded" ? "GEOCODED FROM ADDRESS" : (g.src === "hse" ? "HSE COORDINATE" : "UNMAPPED");
     const rows = [];
     function add(k, v, html, source) {
@@ -4692,6 +4571,7 @@ c&&(o=(s=n._path).getTotalLength()+.1,s.style.strokeDasharray=o,s.style.strokeDa
     body.innerHTML =
       '<div class="insp-head"><div class="insp-id">' + idLine + '</div><h2>' + esc(g.n) + '</h2><div class="badges"><span class="badge on">' + srcLabel + '</span><span class="badge">' + typeLabel(g) + '</span></div>' +
       '<label class="heidi-flag"><input type="checkbox" id="heidi-cust"' + checked + '> Heidi customer</label></div><dl>' + rows.join("") + '</dl>';
+    if (!wasOpen) sizeMap();
     $("heidi-cust").addEventListener("change", function () {
       setCustomer(g.id, this.checked);
       if (state.customers) apply();
@@ -4701,7 +4581,8 @@ c&&(o=(s=n._path).getTotalLength()+.1,s.style.strokeDasharray=o,s.style.strokeDa
 
   function updateHudCounts(list) {
     const onMap = list.filter((g) => g.lat != null).length;
-    $("n-visible").textContent = num(onMap);
+    const shown = state.unmapped ? list.length : onMap;
+    $("n-visible").textContent = num(shown);
     $("live").textContent = num(onMap) + " facilities on the map, " + num(list.length) + " records match. GP index " + num(GPS.length) + ", plotted " + num(gpPlotted.length) + ", unmapped " + num(GPS.length - gpPlotted.length) + ".";
     updateHeidi(list);
   }
@@ -4742,11 +4623,14 @@ c&&(o=(s=n._path).getTotalLength()+.1,s.style.strokeDasharray=o,s.style.strokeDa
   }
 
   function apply() {
-    const list = visibleRecords();
-    renderCounties();
+    let list = visibleRecords();
+    if (renderCounties() === false) list = visibleRecords();
     renderMatches(list);
     renderMap(list);
     updateHudCounts(list);
+    const reset = $("reset-filters");
+    const dirty = !!(state.q || state.county || state.book || state.specialty || state.minClin != null || state.customers || state.hasEmail || state.hasLeader || state.unmapped);
+    if (reset) reset.hidden = !dirty;
     if (state.selected != null && !list.some((g) => g.id === state.selected)) {
       state.selected = null;
       if (halo) { map.removeLayer(halo); halo = null; }
@@ -4774,10 +4658,6 @@ c&&(o=(s=n._path).getTotalLength()+.1,s.style.strokeDasharray=o,s.style.strokeDa
     } else if (marker) {
       map.setView([g.lat, g.lng], Math.max(map.getZoom(), 12));
     }
-    if (window.matchMedia("(max-width: 960px)").matches) {
-      $("inspector").classList.add("open");
-      $("toggle-insp").setAttribute("aria-expanded", "true");
-    }
   }
 
   function setCounty(name) {
@@ -4791,7 +4671,20 @@ c&&(o=(s=n._path).getTotalLength()+.1,s.style.strokeDasharray=o,s.style.strokeDa
     if (b.isValid()) map.fitBounds(b.pad(0.4), { maxZoom: 13, padding: [24, 24] });
   }
 
-  function boot() {
+  function showView(name) {
+    const ids = { map: "view-map", financials: "view-financials", timeline: "view-timeline" };
+    const keys = ["map", "financials", "timeline"];
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      const el = $(ids[key]);
+      if (el) el.hidden = key !== name;
+      const btn = document.querySelector('[data-view="' + key + '"]');
+      if (btn) btn.setAttribute("aria-pressed", key === name ? "true" : "false");
+    }
+    if (name === "map" && map) requestAnimationFrame(function () { map.invalidateSize(); });
+  }
+
+    function boot() {
     map = L.map("map", {
       zoomControl: false,
       minZoom: 6,
@@ -4872,22 +4765,28 @@ c&&(o=(s=n._path).getTotalLength()+.1,s.style.strokeDasharray=o,s.style.strokeDa
       state.q = $("q").value.trim().toLowerCase();
       apply();
     });
-    $("counties").addEventListener("click", function (ev) {
-      const btn = ev.target.closest("[data-county]");
-      if (!btn) return;
-      setCounty(btn.getAttribute("data-county"));
+    $("book").addEventListener("change", function () {
+      state.book = $("book").value;
+      apply();
+    });
+    $("county").addEventListener("change", function () {
+      state.county = $("county").value;
+      apply();
+    });
+    $("filter").addEventListener("change", function () {
+      const v = $("filter").value;
+      state.customers = v === "heidi";
+      state.hasEmail = v === "email";
+      state.hasLeader = v === "leader";
+      state.unmapped = v === "unmapped";
+      state.specialty = v === "obesity" ? "obesity" : "";
+      state.minClin = v === "obesity" ? 10 : null;
+      apply();
     });
     $("matches").addEventListener("click", function (ev) {
       const btn = ev.target.closest("[data-id]");
       if (!btn) return;
       select(idOf(btn.getAttribute("data-id")));
-    });
-    $("books").addEventListener("click", function (ev) {
-      const btn = ev.target.closest("[data-book]");
-      if (!btn) return;
-      const id = btn.getAttribute("data-book");
-      state.book = state.book === id ? "" : id;
-      apply();
     });
     $("fin-rows").addEventListener("input", onFin);
     $("fin-rows").addEventListener("change", onFin);
@@ -4899,35 +4798,22 @@ c&&(o=(s=n._path).getTotalLength()+.1,s.style.strokeDasharray=o,s.style.strokeDa
       book.period = btn.getAttribute("data-fin-period");
       renderFinance();
     });
-    $("open-timeline").addEventListener("click", function () {
-      const panel = $("timeline");
-      const on = panel.hidden;
-      panel.hidden = !on;
-      this.setAttribute("aria-pressed", String(on));
-      if (on) panel.scrollTop = 0;
-    });
-    $("close-timeline").addEventListener("click", function () {
-      $("timeline").hidden = true;
-      $("open-timeline").setAttribute("aria-pressed", "false");
-    });
-
-    $("specialty").addEventListener("change", function () {
-      state.specialty = $("specialty").value;
-      apply();
-    });
-    $("cust-only").addEventListener("click", function () {
-      state.customers = !state.customers;
-      this.setAttribute("aria-pressed", String(state.customers));
-      apply();
-    });
-    $("cut-email").addEventListener("click", function () {
-      state.hasEmail = !state.hasEmail;
-      this.setAttribute("aria-pressed", String(state.hasEmail));
-      apply();
-    });
-    $("cut-leader").addEventListener("click", function () {
-      state.hasLeader = !state.hasLeader;
-      this.setAttribute("aria-pressed", String(state.hasLeader));
+    $("reset-filters").addEventListener("click", function () {
+      state.q = "";
+      state.county = "";
+      state.book = "";
+      state.specialty = "";
+      state.minClin = null;
+      state.customers = false;
+      state.hasEmail = false;
+      state.hasLeader = false;
+      state.unmapped = false;
+      state.selected = null;
+      $("q").value = "";
+      $("book").value = "";
+      $("filter").value = "";
+      if (halo) { map.removeLayer(halo); halo = null; }
+      renderInspector(null);
       apply();
     });
     $("clear-heidi").addEventListener("click", function () {
@@ -4938,69 +4824,52 @@ c&&(o=(s=n._path).getTotalLength()+.1,s.style.strokeDasharray=o,s.style.strokeDa
       if (state.customers) apply();
       else { updateHeidi(visibleRecords()); renderCounties(); }
     });
-    $("min-clin").addEventListener("input", function () {
-      const raw = $("min-clin").value.trim();
-      state.minClin = raw === "" ? null : Number(raw);
-      if (state.minClin != null && !isFinite(state.minClin)) state.minClin = null;
-      apply();
-    });
-    $("preset-obesity").addEventListener("click", function () {
-      state.book = "clinic";
-      state.specialty = "obesity";
-      state.minClin = 10;
-      $("specialty").value = "obesity";
-      $("min-clin").value = "10";
-      $("thin-data").open = true;
-      apply();
-      fit();
-    });
-    $("fit").addEventListener("click", fit);
-    $("reset").addEventListener("click", function () { map.setView([53.42, -7.95], 7); });
-    $("clear").addEventListener("click", function () {
-      state.q = ""; state.county = ""; state.book = ""; state.specialty = ""; state.minClin = null;
-      state.customers = false; state.hasEmail = false; state.hasLeader = false;
-      $("cust-only").setAttribute("aria-pressed", "false");
-      $("cut-email").setAttribute("aria-pressed", "false");
-      $("cut-leader").setAttribute("aria-pressed", "false");
-      $("q").value = "";
-      $("specialty").value = "";
-      $("min-clin").value = "";
+    $("insp-close").addEventListener("click", function () {
       state.selected = null;
       if (halo) { map.removeLayer(halo); halo = null; }
       renderInspector(null);
-      apply();
-      map.setView([53.42, -7.95], 7);
+      const list = visibleRecords();
+      renderMatches(list);
+      renderMap(list);
+    });
+    const viewButtons = document.querySelectorAll("[data-view]");
+    for (let i = 0; i < viewButtons.length; i++) {
+      viewButtons[i].addEventListener("click", function () {
+        showView(this.getAttribute("data-view"));
+      });
+    }
+    $("tl-cat").addEventListener("change", function () {
+      const want = $("tl-cat").value;
+      const items = document.querySelectorAll(".tl-item");
+      for (let i = 0; i < items.length; i++) {
+        const chip = items[i].querySelector(".tl-chip");
+        const cat = chip ? chip.textContent.trim() : "";
+        items[i].hidden = !!(want && cat !== want);
+      }
     });
     document.addEventListener("keydown", function (ev) {
       if (ev.key === "/" && !ev.metaKey && !ev.ctrlKey && !ev.altKey) {
         const tag = (document.activeElement && document.activeElement.tagName) || "";
         if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
         ev.preventDefault();
+        showView("map");
         $("q").focus();
-        $("rail").classList.add("open");
       } else if (ev.key === "Escape") {
         if (document.activeElement === $("q") && $("q").value) {
-          $("q").value = ""; state.q = ""; apply();
-        } else {
+          $("q").value = "";
+          state.q = "";
+          apply();
+        } else if (state.selected != null) {
           state.selected = null;
           if (halo) { map.removeLayer(halo); halo = null; }
           renderInspector(null);
-          renderMatches(visibleRecords());
+          const list = visibleRecords();
+          renderMatches(list);
+          renderMap(list);
         }
       }
     });
-    $("toggle-rail").addEventListener("click", function () {
-      const on = $("rail").classList.toggle("open");
-      this.setAttribute("aria-expanded", String(on));
-      if (on) $("inspector").classList.remove("open");
-      setTimeout(function () { map.invalidateSize(); }, 50);
-    });
-    $("toggle-insp").addEventListener("click", function () {
-      const on = $("inspector").classList.toggle("open");
-      this.setAttribute("aria-expanded", String(on));
-      if (on) $("rail").classList.remove("open");
-    });
-    window.addEventListener("resize", function () { map.invalidateSize(); });
+        window.addEventListener("resize", function () { map.invalidateSize(); });
 
     if (location.hash === "#selftest") {
       setTimeout(function () {
